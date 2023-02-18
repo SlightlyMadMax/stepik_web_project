@@ -3,5 +3,4 @@ sudo rm -rf /etc/nginx/sites-enabled/default
 sudo nginx -t
 sudo /etc/init.d/nginx restart
 
-sudo ln -sf /home/box/web/etc/gunicorn.conf /etc/gunicorn.d/test
-sudo /etc/init.d/gunicorn restart
+gunicorn hello:wsgi_application --bind 0.0.0.0:8080

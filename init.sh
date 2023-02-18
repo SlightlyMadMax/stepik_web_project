@@ -3,4 +3,4 @@ sudo rm -rf /etc/nginx/sites-enabled/default
 sudo nginx -t
 sudo /etc/init.d/nginx restart
 
-gunicorn ask.wsgi:application --bind 0.0.0.0:8000
+gunicorn -c /home/box/web/etc/gunicorn.conf ask.wsgi:application

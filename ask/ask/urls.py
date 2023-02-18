@@ -16,6 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from ask.qa.views import test
+
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(r'^admin/', admin.site.urls),
+    path(r'^$', test),
+    path(r'^login/$', test),
+    path(r'^signup/$', test),
+    path(r'^question/\d+/$', test),
+    path(r'^ask/$', test),
+    path(r'^popular/$', test),
+    path(r'^new/$', test),
 ]

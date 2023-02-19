@@ -24,5 +24,5 @@ class Answer(models.Model):
     text = models.TextField()
     added_at = models.DateTimeField(auto_now_add=True)
     question = models.OneToOneField(to=Question, on_delete=models.DO_NOTHING)
-    author = models.ForeignKey(to=User, on_delete=models.SET_NULL, related_name='answers')
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='answers')
 

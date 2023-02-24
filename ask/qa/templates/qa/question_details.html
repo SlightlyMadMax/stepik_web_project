@@ -11,6 +11,7 @@
     </div>
     {% for answer in question.answer_set %}
         <div class="answer">
+            <h2>{{ answer.author }}</h2>
             <p>{{ answer.text }}</p>
         </div>
     {% endfor %}

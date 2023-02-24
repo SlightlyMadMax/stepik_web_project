@@ -9,10 +9,12 @@
         <h1>{{ question.title }}</h1>
         <p>{{ question.text }}</p>
     </div>
-    {% for answer in question.answer_set %}
-        <div class="answer">
+    <ul>
+    {% for answer in question.answer_set.all %}
+        <li>
             <h2>{{ answer.author }}</h2>
-            <p>{{ answer.text }}</p>
-        </div>
+            <p>{{ answer }}</p>
+        </li>
     {% endfor %}
+    </ul>
 {% endblock %}

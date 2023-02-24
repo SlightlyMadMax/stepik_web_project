@@ -11,10 +11,7 @@
     </div>
     <ul>
     {% for answer in question.answer_set.all %}
-        <li>
-            <h2>{{ answer.author }}</h2>
-            <p>{{ answer.text }}</p>
-        </li>
+        <li>{{ answer.text }}</li>
     {% endfor %}
     </ul>
 {% endblock %}

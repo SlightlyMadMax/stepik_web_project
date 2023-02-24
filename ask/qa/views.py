@@ -53,7 +53,7 @@ def popular_questions(request):
 
 @require_GET
 def question_details(request, pk: int):
-    question = get_object_or_404(Question, pk)
+    question = get_object_or_404(Question, pk=pk)
 
     return render(
         request=request,

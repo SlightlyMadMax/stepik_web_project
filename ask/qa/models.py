@@ -30,6 +30,9 @@ class Question(models.Model):
 class Answer(models.Model):
     text = models.TextField()
     added_at = models.DateTimeField(auto_now_add=True)
-    question = models.OneToOneField(to=Question, on_delete=models.DO_NOTHING)
+    question = models.OneToOneField(to=Question, on_delete=models.DO_NOTHING, related_name='answer_set')
     author = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='answers')
+
+    def __unicode__(self):
+        return self.text
 

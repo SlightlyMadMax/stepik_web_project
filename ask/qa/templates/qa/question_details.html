@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}
+    {{ block.super }} – {{ question }}
+{% endblock %}
+
+{% block content %}
+    <div class="question">
+        <h1>{{ question }}</h1>
+        <p>{{ question.text }}</p>
+    </div>
+    {% for a in question. %}
+        <div class="question">
+            <a href="{{ q.get_url }}">{{ q }}</a>
+        </div>
+    {% endfor %}
+{% endblock %}

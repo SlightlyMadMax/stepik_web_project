@@ -29,7 +29,7 @@ def new_questions(request):
 
 
 @require_GET
-def popular_question(request):
+def popular_questions(request):
     limit = 10
 
     try:

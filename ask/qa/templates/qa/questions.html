@@ -7,7 +7,7 @@
 {% block content %}
     {% for q in questions %}
         <div class="question">
-            <a href="{{ q.get_url }}">{{ q }}</a>
+            <a href="{{ q.get_url }}">{{ q.title }}</a>
         </div>
     {% endfor %}
     <nav><ul class="pagination">

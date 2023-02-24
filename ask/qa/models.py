@@ -13,8 +13,8 @@ class QuestionManager(models.Manager):
 
 class Question(models.Model):
     title = models.CharField(max_length=255)
-    text = models.TextField(null=True)
-    added_at = models.DateTimeField(auto_now_add=True, null=True)
+    text = models.TextField()
+    added_at = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='questions')
     likes = models.ManyToManyField(to=User, related_name='question_likes')
@@ -30,7 +30,7 @@ class Question(models.Model):
 class Answer(models.Model):
     text = models.TextField()
     added_at = models.DateTimeField(auto_now_add=True)
-    question = models.OneToOneField(to=Question, on_delete=models.DO_NOTHING, related_name='answer_set')
+    question = models.OneToOneField(to=Question, on_delete=models.CASCADE, related_name='answer_set')
     author = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='answers')
 
     def __unicode__(self):

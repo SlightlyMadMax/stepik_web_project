@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_GET
 from django.http import HttpResponse
 from django.core.paginator import Paginator
-from models import Question
+from .models import Question
 
 
 @require_GET

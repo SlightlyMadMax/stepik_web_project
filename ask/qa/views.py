@@ -56,7 +56,7 @@ def question_details(request, pk: int):
     if request.method == 'POST':
         form = AnswerForm(request.POST)
         if form.is_valid():
-            answer = form.save()
+            _ = form.save()
             url = question.get_url()
             return HttpResponseRedirect(url)
     else:

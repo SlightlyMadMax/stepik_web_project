@@ -16,7 +16,12 @@ class Question(models.Model):
     text = models.TextField()
     added_at = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)
-    author = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='questions')
+    author = models.ForeignKey(
+        to=User,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='questions'
+    )
     likes = models.ManyToManyField(to=User, related_name='question_likes')
     objects = QuestionManager()
 
@@ -31,8 +36,12 @@ class Answer(models.Model):
     text = models.TextField()
     added_at = models.DateTimeField(auto_now_add=True)
     question = models.ForeignKey(to=Question, on_delete=models.CASCADE, related_name='answer_set')
-    author = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='answers')
+    author = models.ForeignKey(
+        to=User,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='answers'
+    )
 
     def __unicode__(self):
         return self.text
-

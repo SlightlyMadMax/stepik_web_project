@@ -1,9 +1,9 @@
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_GET
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
 from .models import Question
-
+from .forms import AskForm, AnswerForm
 
 @require_GET
 def new_questions(request):
@@ -51,17 +51,41 @@ def popular_questions(request):
     )
 
 
-@require_GET
 def question_details(request, pk: int):
-    question = get_object_or_404(Question, pk=pk)
+    if request.method == 'POST':
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            answer = form.save()
+            url = answer.question.get_url()
+            return HttpResponseRedirect(url)
+    else:
+        question = get_object_or_404(Question, pk=pk)
 
-    return render(
-        request=request,
-        template_name='qa/question_details.html',
-        context={
-            'question': question
-        }
-    )
+        return render(
+            request=request,
+            template_name='qa/question_details.html',
+            context={
+                'form': AnswerForm(initial={"question": question.pk}),
+                'question': question
+            }
+        )
+
+
+def ask(request):
+    if request.method == 'POST':
+        form = AskForm(request.POST)
+        if form.is_valid():
+            question = form.save()
+            url = question.question.get_url()
+            return HttpResponseRedirect(url)
+    else:
+        return render(
+            request=request,
+            template_name='qa/ask.html',
+            context={
+                'form': AnswerForm(),
+            }
+        )
 
 
 def test(request, *args, **kwargs):

@@ -19,6 +19,7 @@ class Question(models.Model):
     author = models.ForeignKey(
         to=User,
         null=True,
+        blank=True,
         on_delete=models.CASCADE,
         related_name='questions'
     )
@@ -39,6 +40,7 @@ class Answer(models.Model):
     author = models.ForeignKey(
         to=User,
         null=True,
+        blank=True,
         on_delete=models.CASCADE,
         related_name='answers'
     )

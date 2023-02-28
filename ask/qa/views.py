@@ -52,15 +52,14 @@ def popular_questions(request):
 
 
 def question_details(request, pk: int):
+    question = get_object_or_404(Question, pk=pk)
     if request.method == 'POST':
         form = AnswerForm(request.POST)
         if form.is_valid():
             answer = form.save()
-            url = answer.question.get_url()
+            url = question.get_url()
             return HttpResponseRedirect(url)
     else:
-        question = get_object_or_404(Question, pk=pk)
-
         return render(
             request=request,
             template_name='qa/question_details.html',

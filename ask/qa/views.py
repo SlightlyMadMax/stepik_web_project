@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from .models import Question
 from .forms import AskForm, AnswerForm
 
+
 @require_GET
 def new_questions(request):
     limit = 10
@@ -60,14 +61,15 @@ def question_details(request, pk: int):
             url = question.get_url()
             return HttpResponseRedirect(url)
     else:
-        return render(
-            request=request,
-            template_name='qa/question_details.html',
-            context={
-                'form': AnswerForm(initial={"question": question.pk}),
-                'question': question
-            }
-        )
+        form = AnswerForm(initial={"question": question.pk})
+    return render(
+        request=request,
+        template_name='qa/question_details.html',
+        context={
+            'form': form,
+            'question': question
+        }
+    )
 
 
 def ask(request):
@@ -78,13 +80,14 @@ def ask(request):
             url = question.get_url()
             return HttpResponseRedirect(url)
     else:
-        return render(
-            request=request,
-            template_name='qa/ask.html',
-            context={
-                'form': AnswerForm(),
-            }
-        )
+        form = AnswerForm()
+    return render(
+        request=request,
+        template_name='qa/ask.html',
+        context={
+            'form': form,
+        }
+    )
 
 
 def test(request, *args, **kwargs):

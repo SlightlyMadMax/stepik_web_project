@@ -11,7 +11,7 @@ class AskForm(forms.Form):
         super(AskForm, self).__init__(*args, **kwargs)
 
     def clean(self):
-        pass
+        return self.cleaned_data
 
     def save(self):
         self.cleaned_data['author'] = self._user
@@ -27,7 +27,7 @@ class AnswerForm(forms.Form):
         super(AnswerForm, self).__init__(*args, **kwargs)
 
     def clean(self):
-        pass
+        return self.cleaned_data
 
     def save(self):
         self.cleaned_data['author'] = self._user

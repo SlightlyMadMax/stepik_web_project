@@ -1,6 +1,6 @@
 from django import forms
 from .models import Question, Answer
-from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 
 
@@ -44,8 +44,29 @@ class SignUpForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
 
-    def clean(self):
-        pass
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if not username:
+            raise forms.ValidationError('Не задано имя пользователя!')
+        try:
+            User.objects.get(username=username)
+            raise forms.ValidationError('Такой пользователь уже существует!')
+        except User.DoesNotExist:
+            pass
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not email:
+            raise forms.ValidationError('Не указан адрес электронной почты!')
+        return email
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if not password:
+            raise forms.ValidationError('Не указан пароль!')
+        self.raw_password = password
+        return make_password(password)
 
     def save(self):
         return User.objects.create(**self.cleaned_data)
@@ -58,5 +79,24 @@ class LoginForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
 
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if not username:
+            raise forms.ValidationError('Не задано имя пользователя!')
+        return username
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if not password:
+            raise forms.ValidationError('Не указан пароль!')
+        return password
+
     def clean(self):
-        pass
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise forms.ValidationError('Неверное имя пользователя или пароль!')
+        if not user.check_password(password):
+            raise forms.ValidationError('Неверное имя пользователя или пароль!')

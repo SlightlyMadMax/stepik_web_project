@@ -98,8 +98,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            response = HttpResponseRedirect(reverse('new_questions'))
-            return response
+            return HttpResponseRedirect(reverse('new_questions'))
     else:
         form = SignUpForm()
     return render(
@@ -116,12 +115,14 @@ def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return HttpResponseRedirect(reverse('new_questions'))
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
         error = u'Неверный логин / пароль'
     else:
-        form = LoginForm(user=request.user)
+        form = LoginForm()
     return render(
         request=request,
         template_name='qa/login.html',

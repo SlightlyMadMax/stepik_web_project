@@ -101,7 +101,7 @@ def signup(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect(reverse('new_questions'))
+            return HttpResponseRedirect(reverse('new_questions'))
     else:
         form = SignUpForm()
     return render(
@@ -123,7 +123,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect(reverse('new_questions'))
+            return HttpResponseRedirect(reverse('new_questions'))
         error = u'Неверный логин / пароль'
     else:
         form = LoginForm()

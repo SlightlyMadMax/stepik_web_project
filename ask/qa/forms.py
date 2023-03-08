@@ -55,8 +55,8 @@ class LoginForm(forms.Form):
     username = forms.CharField(max_length=255)
     password = forms.CharField(widget=forms.PasswordInput)
 
-    def __init__(self, user, *args, **kwargs):
-        self._user = user
+    def __init__(self, *args, **kwargs):
+        self._user = kwargs['user']
         super(LoginForm, self).__init__(*args, **kwargs)
 
     def clean(self):

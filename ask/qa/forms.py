@@ -57,6 +57,7 @@ class LoginForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self._user = kwargs['user']
+        del kwargs['user']
         super(LoginForm, self).__init__(*args, **kwargs)
 
     def clean(self):

@@ -5,8 +5,7 @@ from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login
 from .models import Question
-from .forms import AskForm, AnswerForm, SignUpForm
-from datetime import timedelta, datetime
+from .forms import AskForm, AnswerForm, SignUpForm, LoginForm
 
 
 @require_GET
@@ -98,7 +97,6 @@ def signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            user = authenticate(login=user.login, password=user.password)
             login(request, user)
             response = HttpResponseRedirect(reverse('new_questions'))
             return response
@@ -116,14 +114,14 @@ def signup(request):
 def login_view(request):
     error = ''
     if request.method == 'POST':
-        user_login = request.POST.get('login')
-        password = request.POST.get('password')
-        user = authenticate(login=user_login, password=password)
+        form = LoginForm(request.POST)
+        user = None
+        if form.is_valid():
+            user = form.save()
         if user is not None:
             login(request, user)
             return HttpResponseRedirect(reverse('new_questions'))
-        else:
-            error = u'Неверный логин / пароль'
+        error = u'Неверный логин / пароль'
     return render(
         request=request,
         template_name='qa/login.html',

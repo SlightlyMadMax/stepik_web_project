@@ -1,7 +1,6 @@
 from django import forms
 from .models import Question, Answer
-from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate
 
 
 class AskForm(forms.Form):
@@ -45,7 +44,21 @@ class SignUpForm(forms.Form):
         super(SignUpForm, self).__init__(*args, **kwargs)
 
     def clean(self):
-        self.password = make_password(password=self.password)
+        pass
 
     def save(self):
-        return User.objects.create(**self.cleaned_data)
+        return authenticate(username=self.username, password=self.password)
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=255)
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        pass
+
+    def save(self):
+        return authenticate(username=self.username, password=self.password)

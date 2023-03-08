@@ -1,6 +1,8 @@
 from django import forms
-from .models import Question, Answer, User
+from .models import Question, Answer
+from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+
 
 class AskForm(forms.Form):
     title = forms.CharField(max_length=255)

@@ -2,10 +2,9 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_GET
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.core.management.utils import get_random_secret_key
 from django.core.paginator import Paginator
-from django.contrib.auth.hashers import check_password, make_password
-from .models import Question, User, Session
+from django.contrib.auth import authenticate, login
+from .models import Question
 from .forms import AskForm, AnswerForm, SignUpForm
 from datetime import timedelta, datetime
 
@@ -99,14 +98,9 @@ def signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            sessid = do_login(user.login, user.password)
+            user = authenticate(login=user.login, password=user.password)
+            login(request, user)
             response = HttpResponseRedirect(reverse('new_questions'))
-            response.set_cookie(
-                'sessid',
-                sessid,
-                httponly=True,
-                expires=datetime.now() + timedelta(days=5)
-            )
             return response
     else:
         form = SignUpForm()
@@ -119,38 +113,16 @@ def signup(request):
     )
 
 
-def login(request):
+def login_view(request):
     error = ''
     if request.method == 'POST':
-        login = request.POST.get('login')
+        user_login = request.POST.get('login')
         password = request.POST.get('password')
-        sessid = do_login(login, password)
-        if sessid:
-            response = HttpResponseRedirect(reverse('new_questions'))
-            response.set_cookie(
-                'sessid',
-                sessid,
-                httponly=True,
-                expires=datetime.now() + timedelta(days=5)
-            )
-            return response
+        user = authenticate(login=user_login, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse('new_questions'))
         else:
             error = u'Неверный логин / пароль'
     return render(request, 'login.html', {'error': error})
 
-
-def do_login(login, password):
-    try:
-        user = User.objects.get(login=login)
-    except:
-        return None
-
-    hashed_pass = make_password(password)
-    check_password(password, hashed_pass)
-    session = Session(
-        key=get_random_secret_key(),
-        user=user,
-        expires=datetime.now() + timedelta(days=5),
-    )
-    session.save()
-    return session.key

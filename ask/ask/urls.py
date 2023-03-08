@@ -22,7 +22,7 @@ from qa.views import *
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', new_questions, name='new_questions'),
-    url(r'^login/$', login, name='login'),
+    url(r'^login/$', login_view, name='login'),
     url(r'^signup/$', signup, name='signup'),
     url(r'^question/(?P<pk>\d+)/$', question_details, name='question_details'),
     url(r'^ask/$', ask, name='ask'),

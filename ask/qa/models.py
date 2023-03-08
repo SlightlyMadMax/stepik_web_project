@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 
 class QuestionManager(models.Manager):
@@ -8,18 +9,6 @@ class QuestionManager(models.Manager):
 
     def popular(self):
         return self.order_by('-rating')
-
-
-class User(models.Model):
-    login = models.CharField(unique=True)
-    password = models.CharField()
-    name = models.CharField()
-
-
-class Session(models.Model):
-    key = models.CharField(unique=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    expires = models.DateTimeField()
 
 
 class Question(models.Model):

@@ -1,6 +1,7 @@
 from django import forms
 from .models import Question, Answer
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 
 
 class AskForm(forms.Form):
@@ -47,10 +48,7 @@ class SignUpForm(forms.Form):
         pass
 
     def save(self):
-        return authenticate(
-            username=self.cleaned_data['username'],
-            password=self.cleaned_data['password'],
-        )
+        return User.objects.create(**self.cleaned_data)
 
 
 class LoginForm(forms.Form):

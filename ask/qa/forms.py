@@ -47,7 +47,10 @@ class SignUpForm(forms.Form):
         pass
 
     def save(self):
-        return authenticate(username=self.username, password=self.password)
+        return authenticate(
+            username=self.cleaned_data['username'],
+            password=self.cleaned_data['password'],
+        )
 
 
 class LoginForm(forms.Form):
@@ -61,4 +64,7 @@ class LoginForm(forms.Form):
         pass
 
     def save(self):
-        return authenticate(username=self.username, password=self.password)
+        return authenticate(
+            username=self.cleaned_data['username'],
+            password=self.cleaned_data['password'],
+        )

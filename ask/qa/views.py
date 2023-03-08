@@ -115,10 +115,8 @@ def login_view(request):
     error = ''
     if request.method == 'POST':
         form = LoginForm(request.POST)
-        user = None
         if form.is_valid():
             user = form.save()
-        if user is not None:
             login(request, user)
             return HttpResponseRedirect(reverse('new_questions'))
         error = u'Неверный логин / пароль'

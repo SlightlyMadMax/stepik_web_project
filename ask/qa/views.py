@@ -98,9 +98,9 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             user = authenticate(
-                request,
+                request=request,
                 username=user.username,
-                password=user.password
+                password=user.password,
             )
             login(request, user)
             response = HttpResponseRedirect(reverse('new_questions'))

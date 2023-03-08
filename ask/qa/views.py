@@ -59,11 +59,12 @@ def question_details(request, pk: int):
     if request.method == 'POST':
         form = AnswerForm(request.POST)
         if form.is_valid():
+            form._user = request.user
             _ = form.save()
             url = question.get_url()
             return HttpResponseRedirect(url)
     else:
-        form = AnswerForm(initial={"question": question.pk}, user=request.user)
+        form = AnswerForm(initial={"question": question.pk})
     return render(
         request=request,
         template_name='qa/question_details.html',
@@ -78,11 +79,12 @@ def ask(request):
     if request.method == 'POST':
         form = AskForm(request.POST)
         if form.is_valid():
+            form._user = request.user
             question = form.save()
             url = question.get_url()
             return HttpResponseRedirect(url)
     else:
-        form = AnswerForm(user=request.user)
+        form = AnswerForm()
     return render(
         request=request,
         template_name='qa/ask.html',
@@ -97,12 +99,9 @@ def signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            username = form.cleaned_data["username"]
-            password = form.raw_password
-            user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-            return HttpResponseRedirect(reverse('new_questions'))
+                return HttpResponseRedirect(reverse('new_questions'))
     else:
         form = SignUpForm()
     return render(
@@ -124,7 +123,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-            return HttpResponseRedirect(reverse('new_questions'))
+                return HttpResponseRedirect(reverse('new_questions'))
         error = u'Неверный логин / пароль'
     else:
         form = LoginForm()

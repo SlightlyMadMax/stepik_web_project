@@ -2,22 +2,21 @@ from django import forms
 from .models import Question, Answer
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 
 class AskForm(forms.Form):
     title = forms.CharField(max_length=255)
     text = forms.CharField(widget=forms.Textarea)
 
-    def __init__(self, *args, **kwargs):
-        self._user = kwargs['user']
-        del kwargs['user']
-        super(AskForm, self).__init__(*args, **kwargs)
-
     def clean(self):
         pass
 
     def save(self):
-        self.cleaned_data['author'] = self._user
+        if self._user.is_anonymous():
+            self.cleaned_data['author_id'] = 1
+        else:
+            self.cleaned_data['author'] = self._user
         return Question.objects.create(**self.cleaned_data)
 
 
@@ -26,15 +25,16 @@ class AnswerForm(forms.Form):
     question = forms.ModelChoiceField(queryset=Question.objects.all(), widget=forms.HiddenInput)
 
     def __init__(self, *args, **kwargs):
-        self._user = kwargs['user']
-        del kwargs['user']
         super(AnswerForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         pass
 
     def save(self):
-        self.cleaned_data['author'] = self._user
+        if self._user.is_anonymous():
+            self.cleaned_data['author_id'] = 1
+        else:
+            self.cleaned_data['author'] = self._user
         return Answer.objects.create(**self.cleaned_data)
 
 
@@ -71,7 +71,7 @@ class SignUpForm(forms.Form):
         return make_password(password)
 
     def save(self):
-        return User.objects.create(**self.cleaned_data)
+        return authenticate(**self.cleaned_data)
 
 
 class LoginForm(forms.Form):

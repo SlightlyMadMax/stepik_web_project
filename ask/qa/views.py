@@ -3,7 +3,7 @@ from django.views.decorators.http import require_GET
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
 from .models import Question
 from .forms import AskForm, AnswerForm, SignUpForm, LoginForm
 
@@ -102,8 +102,7 @@ def signup(request):
             if user is not None:
                 login(request, user)
                 return HttpResponseRedirect(reverse('new_questions'))
-    else:
-        form = SignUpForm()
+    form = SignUpForm()
     return render(
         request=request,
         template_name='qa/signup.html',
@@ -114,25 +113,19 @@ def signup(request):
 
 
 def login_view(request):
-    error = ''
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
-            user = authenticate(username=username, password=password)
+            user = form.save()
             if user is not None:
                 login(request, user)
                 return HttpResponseRedirect(reverse('new_questions'))
-        error = u'Неверный логин / пароль'
-    else:
-        form = LoginForm()
+    form = LoginForm()
     return render(
         request=request,
         template_name='qa/login.html',
         context={
             'form': form,
-            'error': error,
         }
     )
 

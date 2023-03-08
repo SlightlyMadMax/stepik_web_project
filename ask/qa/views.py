@@ -114,14 +114,14 @@ def signup(request):
 def login_view(request):
     error = ''
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = LoginForm(request.POST, user=request.user)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return HttpResponseRedirect(reverse('new_questions'))
         error = u'Неверный логин / пароль'
     else:
-        form = LoginForm()
+        form = LoginForm(user=request.user)
     return render(
         request=request,
         template_name='qa/login.html',

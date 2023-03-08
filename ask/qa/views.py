@@ -124,5 +124,11 @@ def login_view(request):
             return HttpResponseRedirect(reverse('new_questions'))
         else:
             error = u'Неверный логин / пароль'
-    return render(request, 'login.html', {'error': error})
+    return render(
+        request=request,
+        template_name='qa/login.html',
+        context={
+            'error': error
+        }
+    )
 

@@ -101,7 +101,7 @@ def signup(request):
             user = form.save()
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect(reverse('new_questions'))
+                return HttpResponseRedirect('/')
     form = SignUpForm()
     return render(
         request=request,

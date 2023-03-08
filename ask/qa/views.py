@@ -57,7 +57,7 @@ def popular_questions(request):
 def question_details(request, pk: int):
     question = get_object_or_404(Question, pk=pk)
     if request.method == 'POST':
-        form = AnswerForm(request.POST, user=request.user)
+        form = AnswerForm(request.POST)
         if form.is_valid():
             _ = form.save()
             url = question.get_url()
@@ -76,7 +76,7 @@ def question_details(request, pk: int):
 
 def ask(request):
     if request.method == 'POST':
-        form = AskForm(request.POST, user=request.user)
+        form = AskForm(request.POST)
         if form.is_valid():
             question = form.save()
             url = question.get_url()
